@@ -1,0 +1,93 @@
+html,body{
+  width: 100%;
+  height:auto;
+  padding:0;
+  margin:0;
+  font-family: '微软雅黑';
+}
+html{
+  overflow-x: hidden;
+}
+p{
+  margin:0;
+  padding:0;
+  color:white;
+  text-align: center;
+}
+body{
+
+}
+ul{
+  list-style: none;
+}
+span{
+  display: inline-block;
+  margin:0;
+}
+div{
+  margin:0;
+}
+#app{
+  width: 120%;
+  height: 1200px;
+  background: url('../img/bg.png');
+  background-size: 100% 100%;
+}
+.header{
+  width: 100%;
+  height: 104px;
+  background: url('../img/header_bg.png');
+  text-align: center;
+  background-size: 100% 100%;
+}
+.header img{
+  width: 300px;
+}
+.dataBox{
+  width: 80%;
+  margin:0 auto;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: space-around;
+}
+.dataBox .gressBox{
+  width: 45%;
+  height: 100%;
+}
+.dataBox .listBox{
+  width: 50%;
+}
+.dataBox .listBox .top{
+  height: 262px;
+  width: 100%;
+  background: url('../img/left_first.png');
+  background-size: 100% 100%;
+}
+.dataBox .listBox .bottom{
+  margin-top: 8px;
+  height: 205px;
+  width: 100%;
+  background: url('../img/left_first.png');
+  background-size: 100% 100%;
+  overflow: hidden;
+}
+.dataBox .gressBox .leftBorder{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.dataBox .gressBox .leftBorder span{
+  display: inline-block;
+  width: 45%;
+  border-bottom:2px dashed  #051858;
+}
+.dataBox>.gressBox>#gress_leftT{
+  width: 80%;
+  height: 300px;
+}
+.dataBox>.gressBox>#gress_right{
+  width: 80%;
+  height: 500px;
+}

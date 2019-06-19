@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <link rel="Bookmark" href="./static/favicon.ico">
+    <link rel="Shortcut Icon" type="image/x-ico" href="./img/favicon.ico"/>
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/jquery-min.js"></script>
+    <script src="./js/echarts.js"></script>
+    <title>北京瑞得音信息技术有限公司</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="header">
+        <img src="./img/header_title.png" alt="">
+      </div>
+      <div class="dataBox">
+        <div class="gressBox">
+          <div style="height:300px;background:url('./img/left_first.png');background-size:100% 100%;position:relative;">
+            <img src="./img/left_title.png" alt="" style="height: 10px;position:absolute;left:5px;top:5px;">
+            <!-- <p style="font-weight:bold;line-height:55px;font-size:12px;">项目数量</p>
+            <p style="font-size: 16px;color:#20fdfa;">25639&nbsp;<span style="font-weight:bold;font-size:16px;">↑</span></p>
+            <p class="leftBorder">
+              <span></span>
+              <span></span>
+            </p>
+            <p style="font-size:12px;">同比&nbsp;<span style="color:red;">2.3%&nbsp;↑</span></p> -->
+            <div id="gress_leftT" style="height:300px;">
+
+            </div>
+          </div>
+          <div style="height:170px;background:url('./img/left_first.png');background-size:100% 100%;margin-top:65px;position:relative;">
+            <img src="./img/left_title2.png" alt="" style="height:10px;position:absolute;top:2px;left:5px;">
+            <div id="gress_right" style="height:200px;margin-top:-60px;"></div>
+          </div>
+        </div>
+        <div class="listBox">
+          <div class="top" style="position:relative;">
+            <img src="./img/right_title.png" alt=""style="height:10px;position:absolute;top:4px;left:5px;">
+            <div class="" id="gress_rightTwo" style="height:300px;position:absolute;top:-40px;width:100%;">
+
+            </div>
+          </div>
+          <div class="bottom" id="bottomT" style="position:relative;">
+            <img src="./img/right_title2.png" alt=""style="height:10px;position:absolute;top:2px;left:5px;">
+            <div id="listId" style="height:200px;margin-top:25px;width:100%;overflow:hidden;">
+              <ul id="ul1" style="color:white;">
+
+              </ul>
+              <ul id="ul2" style="color:white;margin-top:-15px;"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 初始化Echarts -->
+    <script>
+      let left=echarts.init(document.getElementById('gress_leftT'));
+      let right=echarts.init(document.getElementById('gress_right'));
+      let rightTwo=echarts.init(document.getElementById('gress_rightTwo'));
+      let left_option={
+          backgroundColor: 'rgba(0,0,0,0)',
+          //弹窗，响应鼠标指向，显示具体细节
+          tooltip : {
+            trigger: 'item',//以具体项目触发弹窗
+            /*
+            内容格式器，一共有abcd四个代号，例如在饼图中，{a}指系列，即流量来源，{b}指数据项目，如搜索引擎，{c}指数值，如
+            value，{d}百分比。{x}本身代表了相应字符，可以和其他字符拼凑，在弹窗中显示
+            */
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          legend:{
+            orient:'vertical',
+            bottom:'bottom',
+            textStyle:{
+              fontSize:'12',
+              color:'white'
+            },
+            data:[]  //注意要和数据的name相对应
+          },
+          series : [
+            {
+              name:'项目概况',
+              type:'pie',
+              radius:'45%',
+              data:[],
+              animationType: 'scale', //初始动画效果，scale是缩放，expansion是展开
+              itemStyle: { //图例样式
+                normal: {
+                  // color: '#97413c',
+                  shadowBlur: 50,//阴影模糊程度
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'//阴影颜色，一般黑
+                }
+              },
+              label: { //饼图图形的文本标签
+                normal: {  //下同，normal指在普通情况下样式，而非高亮时样式
+                  formatter: '{b|{b}：}{c}  {per|{d}%}  ',
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  rich: {
+                      b: {
+                          fontSize: 10,
+                          lineHeight: 33,
+                          color:'white'
+                      },
+                      per: {
+                          color: '#eee',
+                          backgroundColor: '#334455',
+                          padding: [2, 4],
+                          borderRadius: 2
+                      }
+                  },
+                  textStyle: {
+                    color: 'white',
+                    fontSize:'15'
+                  }
+                }
+              },
+              labelLine:{
+                normal:{
+                  lineStyle:{
+                    color:'white'
+                  }
+                },
+                smooth: 0.5, //0-1，越大越平滑弯曲
+                length: 10,  //从块到文字的第一段长
+                length2: 20  //拐弯到文字的段长
+              },
+              animationEasing: 'elasticOut', //初始动画缓动效果
+              animationDelay: function (idx) {  //数据更新动画时长，idx限定了每个数据块从无到有的速度
+                return Math.random() * 200;
+              }
+            }
+          ]
+        };
+        // left.setOption(aa);
+      let right_option={
+        tooltip: {},
+        xAxis: {
+          data: [],
+          axisLine:{
+            lineStyle:{
+              color:'white'
+            }
+          }
+        },
+        yAxis: {
+          axisLine:{
+            lineStyle:{
+              color:'white'
+            }
+          }
+        },
+        series: [{
+          type: 'bar',
+          data:[],
+          itemStyle:{
+            color:'rgba(38,70,133,.7)'
+          },
+          label:{
+            show:true,
+            textStyle:{
+              color:'white',
+              fontSize:'16'
+            }
+          },
+          animationType: 'scale',
+          animationEasing: 'elasticOut',
+          animationDelay: function (idx) {
+            return Math.random() * 200;
+          }
+        }],
+      };
+      let rightTwo_option={
+          tooltip: {
+              trigger: 'item',
+              formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+              orient: 'vertical',
+              bottom: 'bottom',
+              textStyle:{
+                fontSize:'12',
+                color:'white'
+              },
+              data:[]
+          },
+          series: [
+              {
+                  name:'访问来源',
+                  type:'pie',
+                  selectedMode: 'single',
+                  radius: [0, '25%'],
+                  label: {
+                      normal: {
+                          position: 'inner'
+                      }
+                  },
+                  labelLine: {
+                      normal: {
+                          show: false
+                      }
+                  },
+              },
+              {
+                  type:'pie',
+                  radius: ['35%', '45%'],
+                  label: {
+                      normal: {
+                          formatter: '{b|{b}：}{c}  {per|{d}%}  ',
+                          borderWidth: 1,
+                          borderRadius: 4,
+                          rich: {
+                            b: {
+                                fontSize: 10,
+                                lineHeight: 33,
+                                color:'white'
+                            },
+                            per: {
+                                color: 'white',
+                                backgroundColor: '#334455',
+                                padding: [2, 4],
+                                borderRadius: 2
+                            }
+                          },
+                          textStyle: {
+                            color: 'white',
+                            fontSize:'15'
+                          }
+                      },
+
+                  },
+                  labelLine:{
+                    normal:{
+                      lineStyle:{
+                        color:'white'
+                      }
+                    },
+                    smooth: 0.5, //0-1，越大越平滑弯曲
+                    length: 10,  //从块到文字的第一段长
+                    length2: 20  //拐弯到文字的段长
+                  },
+                  data:[]
+              }
+          ]
+      };
+      $.ajax({
+        type: "GET",
+        url: "http://admin.rightservicetech.com/view/statisticsProject",
+        dataType:'JSON',
+        success:((res)=>{
+          console.log(res)
+          left_option.legend.data=[];
+          left_option.series[0].data=[];
+          right_option.xAxis.data=[];
+          right_option.series[0].data=[];
+          rightTwo_option.legend.data=[];
+          rightTwo_option.series[1].data=[];
+          let color=['#0e6de9','#00af6d','#e6af08','#ac4ed3','#ff395b'];
+          let color2=['#ff395b','#00af6d','#e6af08','#ac4ed3'];
+          for(var i in res.data.projectResultByStateDTOList){
+            left_option.legend.data.push(res.data.projectResultByStateDTOList[i].stateStr);
+            let data={
+              name:res.data.projectResultByStateDTOList[i].stateStr,
+              value:res.data.projectResultByStateDTOList[i].countNumber,
+              itemStyle:{
+                color:color[i]
+              }
+            };
+            left_option.series[0].data.push(data);
+          };
+          for(var x in res.data.engineerNumberDTOList){
+            rightTwo_option.legend.data.push(res.data.engineerNumberDTOList[x].typeName);
+            let data={
+              name:res.data.engineerNumberDTOList[x].typeName,
+              value:res.data.engineerNumberDTOList[x].number,
+              itemStyle:{
+                color:color2[x]
+              }
+            };
+            rightTwo_option.series[1].data.push(data);
+          };
+          res.data.projectResultByTechnologyDTOList.forEach((q)=>{
+            right_option.xAxis.data.push(q.technologyName);
+            right_option.series[0].data.push(q.countNumber);
+          })
+          left.setOption(left_option);
+          right.setOption(right_option);
+          rightTwo.setOption(rightTwo_option)
+        })
+      })
+      setInterval(()=>{
+        $.ajax({
+          type: "GET",
+          url: "http://admin.rightservicetech.com/view/statisticsProject",
+          dataType:'JSON',
+          success:((res)=>{
+            console.log(res)
+            left_option.legend.data=[];
+            left_option.series[0].data=[];
+            right_option.xAxis.data=[];
+            right_option.series[0].data=[];
+            rightTwo_option.legend.data=[];
+            rightTwo_option.series[1].data=[];
+            let color=['#0e6de9','#00af6d','#e6af08','#ac4ed3','#ff395b'];
+            let color2=['#0e6de9','#00af6d','#e6af08','#ac4ed3'];
+            for(var i in res.data.projectResultByStateDTOList){
+              left_option.legend.data.push(res.data.projectResultByStateDTOList[i].stateStr);
+              let data={
+                name:res.data.projectResultByStateDTOList[i].stateStr,
+                value:res.data.projectResultByStateDTOList[i].countNumber,
+                itemStyle:{
+                  color:color[i]
+                }
+              };
+              left_option.series[0].data.push(data);
+            };
+            for(var x in res.data.engineerNumberDTOList){
+              rightTwo_option.legend.data.push(res.data.engineerNumberDTOList[x].stateStr);
+              let data={
+                name:res.data.engineerNumberDTOList[x].stateStr,
+                value:res.data.engineerNumberDTOList[x].countNumber,
+                itemStyle:{
+                  color:color2[x]
+                }
+              };
+              rightTwo_option.series[1].data.push(data);
+            };
+            res.data.projectResultByTechnologyDTOList.forEach((q)=>{
+              right_option.xAxis.data.push(q.technologyName);
+              right_option.series[0].data.push(q.countNumber);
+            })
+            left.setOption(left_option);
+            right.setOption(right_option);
+            rightTwo.setOption(rightTwo_option)
+          })
+        })
+      },1000*60*60)
+
+    </script>
+    <!-- 无限滚动 -->
+    <script>
+    window.onload = roll(50);
+     function roll(t) {
+        var ul1 = document.getElementById("ul1");
+        var ul2 = document.getElementById("ul2");
+         ul2.innerHTML = ul1.innerHTML;
+         var box = document.getElementById("listId");
+         box.scrollTop = 0;
+         var timer = setInterval(rollStart, t);
+          box.onmouseover = function () {
+                 clearInterval(timer)
+           }
+         box.onmouseout = function () {
+             timer = setInterval(rollStart, t);
+         }
+     }
+
+    function rollStart() {
+        var box = document.getElementById("listId");
+         if (box.scrollTop >= ul1.scrollHeight) {
+             box.scrollTop = 0;
+         } else {
+             box.scrollTop++;
+         }
+     }
+    </script>
+    <!-- 数据列表获取 -->
+    <script>
+      $.ajax({
+        type: "POST",
+        url: "http://admin.rightservicetech.com/findProjectListByCondition",
+        dataType:'JSON',
+        data:{state:4,size:50},
+        success:((res)=>{
+          $('#ul1').empty();
+          var html='';
+          var endTime=[];
+          res.data.content.forEach((e)=>{
+            let acceptDate=new Date(e.acceptTime);
+            let aYear=acceptDate.getFullYear();
+            let aMon=acceptDate.getMonth()+1;
+            if(aMon<10){
+              aMon='0'+aMon
+            };
+            let aDay=acceptDate.getDate();
+            if(aDay<10){
+              aDay='0'+aDay
+            }
+            let aTime=aYear+'-'+aMon+'-'+aDay;
+            html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+          })
+          $('#ul1').html(html);
+          $('#ul2').html(html);
+        })
+      });
+      setInterval(()=>{
+        $.ajax({
+          type: "POST",
+          url: "http://admin.rightservicetech.com/findProjectListByCondition",
+          dataType:'JSON',
+          data:{state:4,size:50},
+          success:((res)=>{
+            $('#ul1').empty();
+            var html='';
+            var endTime=[];
+            res.data.content.forEach((e)=>{
+              let acceptDate=new Date(e.acceptTime);
+              let aYear=acceptDate.getFullYear();
+              let aMon=acceptDate.getMonth()+1;
+              if(aMon<10){
+                aMon='0'+aMon
+              };
+              let aDay=acceptDate.getDate();
+              if(aDay<10){
+                aDay='0'+aDay
+              }
+              let aTime=aYear+'-'+aMon+'-'+aDay;
+              html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+            })
+            $('#ul1').html(html);
+            $('#ul2').html(html);
+          })
+        });
+      },1000*60*60)
+    </script>
+  </body>
+</html>
