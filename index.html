@@ -304,7 +304,7 @@
             rightTwo_option.legend.data=[];
             rightTwo_option.series[1].data=[];
             let color=['#0e6de9','#00af6d','#e6af08','#ac4ed3','#ff395b'];
-            let color2=['#0e6de9','#00af6d','#e6af08','#ac4ed3'];
+            let color2=['#ff395b','#00af6d','#e6af08','#ac4ed3'];
             for(var i in res.data.projectResultByStateDTOList){
               left_option.legend.data.push(res.data.projectResultByStateDTOList[i].stateStr);
               let data={
@@ -317,10 +317,10 @@
               left_option.series[0].data.push(data);
             };
             for(var x in res.data.engineerNumberDTOList){
-              rightTwo_option.legend.data.push(res.data.engineerNumberDTOList[x].stateStr);
+              rightTwo_option.legend.data.push(res.data.engineerNumberDTOList[x].typeName);
               let data={
-                name:res.data.engineerNumberDTOList[x].stateStr,
-                value:res.data.engineerNumberDTOList[x].countNumber,
+                name:res.data.engineerNumberDTOList[x].typeName,
+                value:res.data.engineerNumberDTOList[x].number,
                 itemStyle:{
                   color:color2[x]
                 }
@@ -337,7 +337,6 @@
           })
         })
       },1000*60*60)
-
     </script>
     <!-- 无限滚动 -->
     <script>
