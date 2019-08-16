@@ -345,7 +345,6 @@
         dataType:'JSON',
         success:((res)=>{
           let html='';
-          let html1='';
           let beginTime=new Date(res.data.minDate);
           let aYear=beginTime.getFullYear();
           let aMon=beginTime.getMonth()+1;
@@ -371,15 +370,30 @@
           html+="<p class='max'>日期:&nbsp;"+aTime+'&nbsp;至&nbsp;'+bTime+"</p>";
           // html1+="<p class='min'>"+aTime+"</p>";
           $('#gress_leftSec').prepend(html)
-          $('#gress_leftSec').prepend(html1)
+          // $('#gress_leftSec').prepend(html1)
           let data0=[];
           let data1=[];
           let data2=[];
           res.data.technologyList.forEach((e)=>{
-            data0.push(e.projectNumberList[0].number)
-            data1.push(e.projectNumberList[1].number)
-            data2.push(e.projectNumberList[2].number)
+            data0.push(e.projectNumberList[0].number);
+            data1.push(e.projectNumberList[1].number);
+            data2.push(e.projectNumberList[2].number);
           });
+          for(let i in data0){
+            if(data0[i]==0){
+              data0[i]=null;
+            }
+          };
+          for(let x in data1){
+            if(data1[x]==0){
+              data1[x]=null;
+            }
+          }
+          for(let a in data2){
+            if(data2[a]==0){
+              data2[a]=null;
+            }
+          };
           let dataPar={
             name: '进场开工',
             type: 'bar',
@@ -471,7 +485,6 @@
             left.setOption(left_option);
             right.setOption(right_option);
             rightTwo.setOption(rightTwo_option)
-            leftSec.setOption(left_optionSec)
           })
         })
         $.ajax({
@@ -480,7 +493,8 @@
           dataType:'JSON',
           success:((res)=>{
             let html='';
-            let html1='';
+            left_optionSec.series=[];
+            console.log(left_optionSec.series);
             let beginTime=new Date(res.data.minDate);
             let aYear=beginTime.getFullYear();
             let aMon=beginTime.getMonth()+1;
@@ -504,9 +518,7 @@
             }
             let bTime=bYear+'-'+bMon+'-'+bDay;
             html+="<p class='max'>日期:&nbsp;"+aTime+'&nbsp;至&nbsp;'+bTime+"</p>";
-            // html1+="<p class='min'>"+aTime+"</p>";
             $('#gress_leftSec').prepend(html)
-            $('#gress_leftSec').prepend(html1)
             let data0=[];
             let data1=[];
             let data2=[];
@@ -515,6 +527,21 @@
               data1.push(e.projectNumberList[1].number)
               data2.push(e.projectNumberList[2].number)
             });
+            for(let i in data0){
+              if(data0[i]==0){
+                data0[i]=null;
+              }
+            };
+            for(let x in data1){
+              if(data1[x]==0){
+                data1[x]=null;
+              }
+            }
+            for(let a in data2){
+              if(data2[a]==0){
+                data2[a]=null;
+              }
+            };
             let dataPar={
               name: '进场开工',
               type: 'bar',
@@ -557,13 +584,15 @@
                   },
                   data: data2
             }
-            left_optionSec.series.push(dataPar)
-            left_optionSec.series.push(dataPar1)
-            left_optionSec.series.push(dataPar2)
-            leftSec.setOption(left_optionSec)
+            left_optionSec.series.push(dataPar);
+            left_optionSec.series.push(dataPar1);
+            left_optionSec.series.push(dataPar2);
+            console.log(left_optionSec.series);
+            leftSec.setOption(left_optionSec);
           })
         })
       },1000*60*60)
+    // },30000)
     </script>
     <!-- 无限滚动 -->
     <script>
