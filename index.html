@@ -494,7 +494,6 @@
           success:((res)=>{
             let html='';
             left_optionSec.series=[];
-            console.log(left_optionSec.series);
             let beginTime=new Date(res.data.minDate);
             let aYear=beginTime.getFullYear();
             let aMon=beginTime.getMonth()+1;
@@ -587,7 +586,6 @@
             left_optionSec.series.push(dataPar);
             left_optionSec.series.push(dataPar1);
             left_optionSec.series.push(dataPar2);
-            console.log(left_optionSec.series);
             leftSec.setOption(left_optionSec);
           })
         })
