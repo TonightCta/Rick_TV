@@ -53,6 +53,14 @@ div{
 .dataBox .gressBox{
   width: 45%;
   height: 100%;
+  position: relative;
+}
+.dataBox .gressBox .max{
+  color:white;
+  position: absolute;
+  left:0;
+  top:30px;
+  font-size: 12px;
 }
 .dataBox .listBox{
   width: 50%;
@@ -86,6 +94,11 @@ div{
 .dataBox>.gressBox>#gress_leftT{
   width: 80%;
   height: 300px;
+}
+.dataBox>.gressBox>#gress_leftSec{
+  width: 80%;
+  height: 300px;
+
 }
 .dataBox>.gressBox>#gress_right{
   width: 80%;

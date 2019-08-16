@@ -16,17 +16,13 @@
         <img src="./img/header_title.png" alt="">
       </div>
       <div class="dataBox">
-        <div class="gressBox">
+        <div class="gressBox" id="gressBox">
           <div style="height:300px;background:url('./img/left_first.png');background-size:100% 100%;position:relative;">
             <img src="./img/left_title.png" alt="" style="height: 10px;position:absolute;left:5px;top:5px;">
-            <!-- <p style="font-weight:bold;line-height:55px;font-size:12px;">项目数量</p>
-            <p style="font-size: 16px;color:#20fdfa;">25639&nbsp;<span style="font-weight:bold;font-size:16px;">↑</span></p>
-            <p class="leftBorder">
-              <span></span>
-              <span></span>
-            </p>
-            <p style="font-size:12px;">同比&nbsp;<span style="color:red;">2.3%&nbsp;↑</span></p> -->
-            <div id="gress_leftT" style="height:300px;">
+            <div id="gress_leftT" style="height:300px;transition:1s all;">
+
+            </div>
+            <div id="gress_leftSec" style="height:280px;transition:1s all;position:absolute;top:20px;left:-3px;width:90%;margin-left:10px;opacity:0;">
 
             </div>
           </div>
@@ -38,7 +34,7 @@
         <div class="listBox">
           <div class="top" style="position:relative;">
             <img src="./img/right_title.png" alt=""style="height:10px;position:absolute;top:4px;left:5px;">
-            <div class="" id="gress_rightTwo" style="height:300px;position:absolute;top:-40px;width:100%;">
+            <div class="" id="gress_rightTwo" style="height:268px;position:absolute;top:-10px;width:100%;">
 
             </div>
           </div>
@@ -57,8 +53,21 @@
     <!-- 初始化Echarts -->
     <script>
       let left=echarts.init(document.getElementById('gress_leftT'));
+      let leftSec=echarts.init(document.getElementById('gress_leftSec'));
       let right=echarts.init(document.getElementById('gress_right'));
       let rightTwo=echarts.init(document.getElementById('gress_rightTwo'));
+      setInterval(()=>{
+        $('#gress_leftT').css('opacity','0');
+        setTimeout(()=>{
+          $('#gress_leftSec').css('opacity','1');
+        });
+        setTimeout(()=>{
+          $('#gress_leftSec').css('opacity','0');
+          setTimeout(()=>{
+            $('#gress_leftT').css('opacity','1');
+          })
+        },10000)
+      },20000)
       let left_option={
           backgroundColor: 'rgba(0,0,0,0)',
           //弹窗，响应鼠标指向，显示具体细节
@@ -135,6 +144,44 @@
           ]
         };
         // left.setOption(aa);
+      let left_optionSec={
+          tooltip : {
+              trigger: 'item',
+              axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                  type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+          },
+          legend: {
+              // data: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎']
+              textStyle:{
+                color:'white'
+              },
+          },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
+          xAxis:  {
+              type: 'category',
+              data: ['UCC','数通','IT','能基','VC'],
+              axisLine:{
+               lineStyle:{
+                 color:'white'
+               }
+             }
+          },
+          yAxis: {
+              type: 'value',
+              axisLine:{
+               lineStyle:{
+                 color:'white'
+               }
+              }
+          },
+          series: []
+      };
       let right_option={
         tooltip: {},
         xAxis: {
@@ -245,12 +292,13 @@
               }
           ]
       };
+
+      //图表数据
       $.ajax({
         type: "GET",
         url: "http://admin.rightservicetech.com/view/statisticsProject",
         dataType:'JSON',
         success:((res)=>{
-          console.log(res)
           left_option.legend.data=[];
           left_option.series[0].data=[];
           right_option.xAxis.data=[];
@@ -287,16 +335,105 @@
           })
           left.setOption(left_option);
           right.setOption(right_option);
-          rightTwo.setOption(rightTwo_option)
+          rightTwo.setOption(rightTwo_option);
+          leftSec.setOption(left_optionSec)
         })
-      })
+      });
+      $.ajax({
+        type:'GET',
+        url:'http://admin.rightservicetech.com/view/statisticsProjectForTechnologyAndDateType',
+        dataType:'JSON',
+        success:((res)=>{
+          let html='';
+          let html1='';
+          let beginTime=new Date(res.data.minDate);
+          let aYear=beginTime.getFullYear();
+          let aMon=beginTime.getMonth()+1;
+          if(aMon<10){
+            aMon='0'+aMon
+          };
+          let aDay=beginTime.getDate();
+          if(aDay<10){
+            aDay='0'+aDay
+          }
+          let aTime=aYear+'-'+aMon+'-'+aDay;
+          let endTime=new Date(res.data.maxDate);
+          let bYear=endTime.getFullYear();
+          let bMon=endTime.getMonth()+1;
+          if(bMon<10){
+            bMon='0'+bMon
+          };
+          let bDay=endTime.getDate();
+          if(bDay<10){
+            bDay='0'+bDay
+          }
+          let bTime=bYear+'-'+bMon+'-'+bDay;
+          html+="<p class='max'>日期:&nbsp;"+aTime+'&nbsp;至&nbsp;'+bTime+"</p>";
+          // html1+="<p class='min'>"+aTime+"</p>";
+          $('#gress_leftSec').prepend(html)
+          $('#gress_leftSec').prepend(html1)
+          let data0=[];
+          let data1=[];
+          let data2=[];
+          res.data.technologyList.forEach((e)=>{
+            data0.push(e.projectNumberList[0].number)
+            data1.push(e.projectNumberList[1].number)
+            data2.push(e.projectNumberList[2].number)
+          });
+          let dataPar={
+            name: '进场开工',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                }
+            },
+            itemStyle:{
+              color:'#0e6de9',
+            },
+            data:data0
+          };
+          let dataPar1={
+              name: '完工',
+              type: 'bar',
+              stack: '总量',
+              label: {
+                  normal: {
+                      show: true,
+                  }
+              },
+              itemStyle:{
+                color:'#00af6d',
+              },
+              data: data1
+          };
+          let dataPar2={
+                name: '验收',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                    }
+                },
+                itemStyle:{
+                  color:'#e6af08',
+                },
+                data: data2
+          }
+          left_optionSec.series.push(dataPar)
+          left_optionSec.series.push(dataPar1)
+          left_optionSec.series.push(dataPar2)
+          leftSec.setOption(left_optionSec)
+        })
+      });
       setInterval(()=>{
         $.ajax({
           type: "GET",
           url: "http://admin.rightservicetech.com/view/statisticsProject",
           dataType:'JSON',
           success:((res)=>{
-            console.log(res)
             left_option.legend.data=[];
             left_option.series[0].data=[];
             right_option.xAxis.data=[];
@@ -334,6 +471,96 @@
             left.setOption(left_option);
             right.setOption(right_option);
             rightTwo.setOption(rightTwo_option)
+            leftSec.setOption(left_optionSec)
+          })
+        })
+        $.ajax({
+          type:'GET',
+          url:'http://admin.rightservicetech.com/view/statisticsProjectForTechnologyAndDateType',
+          dataType:'JSON',
+          success:((res)=>{
+            let html='';
+            let html1='';
+            let beginTime=new Date(res.data.minDate);
+            let aYear=beginTime.getFullYear();
+            let aMon=beginTime.getMonth()+1;
+            if(aMon<10){
+              aMon='0'+aMon
+            };
+            let aDay=beginTime.getDate();
+            if(aDay<10){
+              aDay='0'+aDay
+            }
+            let aTime=aYear+'-'+aMon+'-'+aDay;
+            let endTime=new Date(res.data.maxDate);
+            let bYear=endTime.getFullYear();
+            let bMon=endTime.getMonth()+1;
+            if(bMon<10){
+              bMon='0'+bMon
+            };
+            let bDay=endTime.getDate();
+            if(bDay<10){
+              bDay='0'+bDay
+            }
+            let bTime=bYear+'-'+bMon+'-'+bDay;
+            html+="<p class='max'>日期:&nbsp;"+aTime+'&nbsp;至&nbsp;'+bTime+"</p>";
+            // html1+="<p class='min'>"+aTime+"</p>";
+            $('#gress_leftSec').prepend(html)
+            $('#gress_leftSec').prepend(html1)
+            let data0=[];
+            let data1=[];
+            let data2=[];
+            res.data.technologyList.forEach((e)=>{
+              data0.push(e.projectNumberList[0].number)
+              data1.push(e.projectNumberList[1].number)
+              data2.push(e.projectNumberList[2].number)
+            });
+            let dataPar={
+              name: '进场开工',
+              type: 'bar',
+              stack: '总量',
+              label: {
+                  normal: {
+                      show: true,
+                  }
+              },
+              itemStyle:{
+                color:'#0e6de9',
+              },
+              data:data0
+            };
+            let dataPar1={
+                name: '完工',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                    }
+                },
+                itemStyle:{
+                  color:'#00af6d',
+                },
+                data: data1
+            };
+            let dataPar2={
+                  name: '验收',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      normal: {
+                          show: true,
+                      }
+                  },
+                  itemStyle:{
+                    color:'#e6af08',
+                  },
+                  data: data2
+            }
+            left_optionSec.series.push(dataPar)
+            left_optionSec.series.push(dataPar1)
+            left_optionSec.series.push(dataPar2)
+            leftSec.setOption(left_optionSec)
           })
         })
       },1000*60*60)
@@ -388,7 +615,12 @@
               aDay='0'+aDay
             }
             let aTime=aYear+'-'+aMon+'-'+aDay;
-            html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+            if(e.acceptTime==null||e.acceptTime==''){
+              html+=e.name.substring(0,25)+'...'+'</li>'
+
+            }else{
+              html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+            }
           })
           $('#ul1').html(html);
           $('#ul2').html(html);
