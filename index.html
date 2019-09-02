@@ -516,8 +516,6 @@
               bDay='0'+bDay
             }
             let bTime=bYear+'-'+bMon+'-'+bDay;
-            html+="<p class='max'>日期:&nbsp;"+aTime+'&nbsp;至&nbsp;'+bTime+"</p>";
-            $('#gress_leftSec').prepend(html)
             let data0=[];
             let data1=[];
             let data2=[];
@@ -589,8 +587,8 @@
             leftSec.setOption(left_optionSec);
           })
         })
-      },1000*60*60)
-    // },30000)
+      // },1000*60*60)
+    },30000)
     </script>
     <!-- 无限滚动 -->
     <script>
