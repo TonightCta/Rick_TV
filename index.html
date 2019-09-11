@@ -592,30 +592,30 @@
     </script>
     <!-- 无限滚动 -->
     <script>
-    window.onload = roll(50);
-     function roll(t) {
-        var ul1 = document.getElementById("ul1");
-        var ul2 = document.getElementById("ul2");
-         ul2.innerHTML = ul1.innerHTML;
-         var box = document.getElementById("listId");
-         box.scrollTop = 0;
-         var timer = setInterval(rollStart, t);
-          box.onmouseover = function () {
-                 clearInterval(timer)
+      window.onload = roll(50);
+       function roll(t) {
+          var ul1 = document.getElementById("ul1");
+          var ul2 = document.getElementById("ul2");
+           ul2.innerHTML = ul1.innerHTML;
+           var box = document.getElementById("listId");
+           box.scrollTop = 0;
+           var timer = setInterval(rollStart, t);
+            box.onmouseover = function () {
+                   clearInterval(timer)
+             }
+           box.onmouseout = function () {
+               timer = setInterval(rollStart, t);
            }
-         box.onmouseout = function () {
-             timer = setInterval(rollStart, t);
-         }
-     }
+       }
 
-    function rollStart() {
-        var box = document.getElementById("listId");
-         if (box.scrollTop >= ul1.scrollHeight) {
-             box.scrollTop = 0;
-         } else {
-             box.scrollTop++;
-         }
-     }
+      function rollStart() {
+          var box = document.getElementById("listId");
+           if (box.scrollTop >= ul1.scrollHeight) {
+               box.scrollTop = 0;
+           } else {
+               box.scrollTop++;
+           }
+       }
     </script>
     <!-- 数据列表获取 -->
     <script>
