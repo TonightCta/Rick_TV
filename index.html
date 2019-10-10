@@ -642,7 +642,6 @@
             let aTime=aYear+'-'+aMon+'-'+aDay;
             if(e.acceptTime==null||e.acceptTime==''){
               html+=e.name.substring(0,25)+'...'+'</li>'
-
             }else{
               html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
             }
@@ -673,7 +672,11 @@
                 aDay='0'+aDay
               }
               let aTime=aYear+'-'+aMon+'-'+aDay;
-              html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+              if(e.acceptTime==null||e.acceptTime==''){
+                html+=e.name.substring(0,25)+'...'+'</li>'
+              }else{
+                html+='<li>'+'['+aTime+']'+'&nbsp;&nbsp;'+e.name.substring(0,15)+'...'+'</li>'
+              }
             })
             $('#ul1').html(html);
             $('#ul2').html(html);
